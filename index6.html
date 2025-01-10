@@ -7,7 +7,7 @@
     <title>Juego de Multiplicación Interactivo</title>
     <style>
         body {
-            font-family: 'Comic Sans MS', 'Comic Sans';
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
             text-align: center;
             background-color: #f5f5f5;
             color: #333;
@@ -176,7 +176,7 @@
                 if (score.correct >= 15) {
                     level++;
                     playSound(true); // Sonido correcto
-                    feedback.innerText = `¡Felicidades! Has alcanzado el Nivel ${level}.`;
+                    feedback.innerText = `¡Felicitaciones! Has alcanzado el Nivel ${level}.`;
                     setTimeout(() => {
                         feedback.innerText = '';
                         score.correct = 0;
@@ -188,8 +188,13 @@
                 }
             } else {
                 score.incorrect++;
-                feedback.innerText = "Has perdido. Reiniciando el juego...";
-                setTimeout(restartGame, 2000);
+                if (score.incorrect >= 5) {
+                    feedback.innerText = "Has alcanzado el máximo de errores. Reiniciando el juego...";
+                    setTimeout(restartGame, 2000);
+                } else {
+                    feedback.innerText = `Error número ${score.incorrect}.`;
+                    playSound(false); // Sonido incorrecto
+                }
             }
             updateScoreboard();
         }
@@ -236,6 +241,7 @@
                 <li>Haz clic en la opción que consideres correcta.</li>
                 <li>Responde correctamente para sumar puntos.</li>
                 <li>Alcanza 15 aciertos para avanzar al siguiente nivel.</li>
+                <li>El juego se reiniciará al llegar a 5 errores.</li>
             </ul>
         </section>
     </main>
