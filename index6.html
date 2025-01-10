@@ -1,12 +1,245 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casa Vacacional Ibiza</title>
+    <title>Juego de Multiplicación Interactivo</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            text-align: center;
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 0;
+            margin: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        main {
+            margin-top: 30px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .option {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .option:hover {
+            background-color: #e9e9e9;
+        }
+
+        #question {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        #feedback {
+            margin-top: 20px;
+        }
+
+        #scoreboard {
+            position: relative;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-size: 1.2em;
+            margin-top: 30px;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: red;
+            font-weight: bold;
+        }
+
+        #congratulations {
+            display: none;
+            margin-top: 20px;
+            font-size: 2em;
+            color: green;
+            font-weight: bold;
+        }
+
+        @media screen and (max-width: 600px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+
+            .option {
+                font-size: 1em;
+                padding: 10px;
+            }
+
+            #scoreboard {
+                font-size: 1em;
+                padding: 5px 10px;
+                margin-top: 20px;
+            }
+
+            #question {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+    <script>
+        let currentQuestion = {};
+        let score = { correct: 0, incorrect: 0 };
+        let level = 1;
+
+        function startGame() {
+            document.getElementById('game-intro').hidden = true;
+            document.getElementById('game-core').hidden = false;
+            newQuestion();
+            updateScoreboard();
+        }
+
+        function newQuestion() {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const correctAnswer = num1 * num2;
+            const options = generateOptions(correctAnswer);
+            currentQuestion = { num1, num2, answer: correctAnswer };
+
+            document.getElementById('question').innerText = `¿Cuánto es ${num1} x ${num2}?`;
+
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            options.forEach(option => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.innerText = option;
+                div.dataset.answer = option;
+                div.addEventListener('click', () => checkAnswer(option));
+                optionsContainer.appendChild(div);
+            });
+
+            document.getElementById('message').innerText = '';
+        }
+
+        function generateOptions(correctAnswer) {
+            const options = new Set();
+            options.add(correctAnswer);
+            while (options.size < 4) {
+                const randomOption = Math.floor(Math.random() * 100);
+                options.add(randomOption);
+            }
+            return Array.from(options).sort(() => Math.random() - 0.5);
+        }
+
+        function checkAnswer(selectedAnswer) {
+            const feedback = document.getElementById('message');
+            if (selectedAnswer === currentQuestion.answer) {
+                score.correct++;
+                if (score.correct >= 15) {
+                    level++;
+                    playSound(true); // Sonido correcto
+                    feedback.innerText = `¡Felicitaciones! Has alcanzado el Nivel ${level}.`;
+                    setTimeout(() => {
+                        feedback.innerText = '';
+                        score.correct = 0;
+                        newQuestion();
+                    }, 3000);
+                } else {
+                    playSound(true); // Sonido correcto
+                    newQuestion();
+                }
+            } else {
+                score.incorrect++;
+                feedback.innerText = "Has perdido. Reiniciando el juego...";
+                setTimeout(restartGame, 2000);
+            }
+            updateScoreboard();
+        }
+
+        function playSound(isCorrect) {
+            const audio = new Audio(isCorrect ? 'correct.mp3' : 'incorrect.mp3');
+            audio.play();
+        }
+
+        function updateScoreboard() {
+            document.getElementById('scoreboard').innerHTML = `
+                <span style="color: #4CAF50;">Aciertos: ${score.correct}</span> |
+                <span style="color: red;">Errores: ${score.incorrect}</span> |
+                <span style="color: blue;">Nivel: ${level}</span>`;
+        }
+
+        function restartGame() {
+            score.correct = 0;
+            score.incorrect = 0;
+            updateScoreboard();
+            document.getElementById('message').innerText = "";
+            newQuestion();
+        }
+    </script>
 </head>
 <body>
-    Hola esto es un  nuevo proyecto
-    
+    <header>
+        <h1>Aprende las Tablas de Multiplicar</h1>
+    </header>
+    <main>
+        <section id="game-intro">
+            <p>¡Bienvenido! Aprende y juega con las tablas de multiplicar.</p>
+            <button onclick="startGame()">Iniciar Juego</button>
+        </section>
+        <section id="game-core" hidden>
+            <div id="question"></div>
+            <div id="options"></div>
+            <div id="message"></div>
+            <div id="scoreboard">Aciertos: 0 | Errores: 0 | Nivel: 1</div>
+        </section>
+        <section id="instructions">
+            <h2>Instrucciones de Ayuda</h2>
+            <ul>
+                <li>Haz clic en la opción que consideres correcta.</li>
+                <li>Responde correctamente para sumar puntos.</li>
+                <li>Alcanza 15 aciertos para avanzar al siguiente nivel.</li>
+            </ul>
+        </section>
+    </main>
 </body>
 </html>
