@@ -176,7 +176,7 @@
                 if (score.correct >= 15) {
                     level++;
                     playSound(true); // Sonido correcto
-                    feedback.innerText = `¡Felicitaciones! Has alcanzado el Nivel ${level}.`;
+                    feedback.innerText = `¡Felicidades! Has alcanzado el Nivel ${level}.`;
                     setTimeout(() => {
                         feedback.innerText = '';
                         score.correct = 0;
