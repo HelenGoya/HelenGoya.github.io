@@ -222,7 +222,7 @@
                 if (score.correct >= 15) {
                     level++;
                     playSound(true); // Sonido correcto
-                    feedback.innerText = `¡Felicitaciones! Has alcanzado el Nivel ${level}.`;
+                    feedback.innerText = `¡Felicidades! Has alcanzado el Nivel ${level}.`;
                     setTimeout(() => {
                         feedback.innerText = '';
                         score.correct = 0;
@@ -312,11 +312,12 @@
         <section id="instructions">
             <h2>Instrucciones de Ayuda</h2>
             <ul>
-                <li>Haz clic en la opción que consideres correcta.</li>
-                <li>Responde correctamente para sumar puntos.</li>
+                <li>Haz clic en el número que consideres correcto.</li>
+                <li>Responde bien para sumar puntos.</li>
                 <li>Alcanza 15 aciertos para avanzar al siguiente nivel.</li>
                 <li>El juego se reiniciará al llegar a 5 errores.</li>
                 <li>Puedes cambiar de tabla en cualquier momento sin perder tu progreso.</li>
+                <li>Haz caso a tu profe, estudia las tablas.</li>
             </ul>
         </section>
     </main>
